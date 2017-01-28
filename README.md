@@ -1,4 +1,4 @@
-# pro-movie
+# Media Trailer Site
 
 The project consists in a server side code to store a list of your favourite movies and TV Shows, including some useful
 information for Movies and TVShows like Title, posters, and trailers.
