@@ -1,8 +1,11 @@
 """ This module provide functions to render the web page """
 import webbrowser
 import os
-import movie
 import re
+import json
+import movie
+import content
+
 
 # Main page content and scripting
 MAIN_PAGE_CONTENT = """
@@ -24,7 +27,6 @@ MAIN_PAGE_CONTENT = """
           margin: 0;
           background: #FAFAFA;
           font-family: 'Roboto', sans-serif;
-          overflow: hidden;
         }
         .header{
           width: 100%;
@@ -119,7 +121,6 @@ MAIN_PAGE_CONTENT = """
           display: flex;
           flex-direction: column;
           width: 100%;
-          margin-bottom: 8px;
           height: 90vh;
           overflow-y: auto;
         }
@@ -280,7 +281,7 @@ MAIN_PAGE_CONTENT = """
         </div>
         <div class="container__tvshow box-hidden" id="tvContainer">
           <div class="card">
-            TV Show
+            {{tvshowitems}}
           </div>
         </div>
       </div>
@@ -342,6 +343,8 @@ MAIN_PAGE_CONTENT = """
         btClosePlayer = document.querySelector('.close-player');
         function closeDialog(e){
           var target = e.target;
+          let player = document.getElementById('player');
+          player.src = "";
           let dialog = document.querySelector('.trailer-modal');
           dialog.classList.remove('trailer-modal-target');
         }
@@ -369,7 +372,7 @@ MEDIA_CONTENT = """
 # Single function to inject content into html
 def create_media_card(objs):
     """Single function to inject content into html"""
-    content = ''
+    contentaux = ''
     movies = []
     tvshows = []
     for item in objs:
@@ -379,32 +382,45 @@ def create_media_card(objs):
             tvshows.append(item)
     for mov in movies:
         tile = MEDIA_CONTENT
-        jsonstr = """\'{\"title\":\"{{title}}\",
-                     \"date\":\"{{date}}\",
-                     \"storyline\":\"{{storyline}}\",
-                     \"youtubeurl\":\"{{youtubeurl}}\",
-                     \"raiting\":\"{{raiting}}\"}\'"""
+        jsonobj = content.Content()
+        jsonobj.title = mov.title
+        jsonobj.date = mov.release_date
+        jsonobj.storyline = re.sub("\n", " ", mov.storyline)
+        jsonobj.youtubeurl = mov.trailer_url
+        jsonobj.raiting = mov.rating
+        jsonstr = json.dumps(jsonobj.__dict__)
         tile = tile.replace("{{poster}}", mov.poster_url)
         tile = tile.replace("{{title}}", mov.title)
         tile = tile.replace("{{releasedate}}", mov.release_date)
         tile = tile.replace("{{storyline}}", mov.storyline)
-        jsonstr = jsonstr.replace("{{title}}", mov.title)
-        jsonstr = jsonstr.replace("{{date}}", mov.release_date)
-        jsonstr = jsonstr.replace("{{storyline}}", mov.storyline)
-        jsonstr = jsonstr.replace("{{youtubeurl}}", mov.trailer_url)
-        jsonstr = jsonstr.replace("{{raiting}}", mov.rating)
         tile = tile.replace("{{json}}", jsonstr)
-        content = content + " " + tile
-    return content
+        contentaux = contentaux + " " + tile
+
+    rendered_content = re.sub("{{tiles}}", contentaux, MAIN_PAGE_CONTENT)
+    contentaux = ''
+    for tvshow in tvshows:
+        tileshow = MEDIA_CONTENT
+        jsonobj = content.Content()
+        jsonobj.title = tvshow.title
+        jsonobj.date = tvshow.premiere_date
+        jsonobj.storyline = re.sub("\n", " ", tvshow.storyline)
+        jsonobj.youtubeurl = tvshow.trailer_url
+        jsonstr = json.dumps(jsonobj.__dict__)
+        tileshow = tileshow.replace("{{poster}}", tvshow.poster_url)
+        tileshow = tileshow.replace("{{title}}", tvshow.title)
+        tileshow = tileshow.replace("{{releasedate}}", tvshow.premiere_date)
+        tileshow = tileshow.replace("{{storyline}}", tvshow.storyline)
+        tileshow = tileshow.replace("{{json}}", jsonstr)
+        contentaux = contentaux + " " + tileshow
+    rendered_content = re.sub("{{tvshowitems}}", contentaux, rendered_content)
+    return rendered_content
 
 # Single function to create and open the page in the browser
 def open_media_page(objs):
     """ Single function to create and open the page in the browser """
     output_file = open('index.html', 'w')
 
-    rendered_content = re.sub("{{tiles}}", create_media_card(objs), MAIN_PAGE_CONTENT)
-
-    output_file.write(rendered_content)
+    output_file.write(create_media_card(objs))
     output_file.close()
 
     url = os.path.abspath(output_file.name)
