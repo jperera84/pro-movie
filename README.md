@@ -46,5 +46,5 @@ with the web page.
 ## Known issues
 <ol>
   <li>The search option is not implemented yet.</li>
-  <li>There is an error in the JSON parse that everytime that you write any word with "'" the web page fail to open the info dialog.</li>
+  <li>There is an error in the JSON parse that failed to show the information dialog when the Storyline attribute or the title has a word with Apostrophe (').</li>
 </ol>
