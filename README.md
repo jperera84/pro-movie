@@ -42,3 +42,9 @@ The project was developed using Python 2.7.12.
 
 The project will be interpreted by the Python interpreter and when the parser finish the program will open a new browser tab
 with the web page.
+
+<b>Issues</b>
+<ol>
+  <li>The search option is not implemented yet.</li>
+  <li>There is an error in the JSON parse that everytime that you write any word with "'" the web page fail to open the info dialog.</li>
+</ol>
