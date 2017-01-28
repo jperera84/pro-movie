@@ -1,7 +1,9 @@
 """ Testing Program """
 import movie
-import render_page
 import tvshow
+import render_page
+
+# Creating the media items to load in the page
 
 MOVIE1 = movie.Movie("The girl on the train",
                      "https://upload.wikimedia.org/wikipedia/en/3/34/The_Girl_on_The_Train.jpg",
@@ -53,4 +55,6 @@ TVSHOW1 = tvshow.TvShow("The Crown",
                         "Biographic", 1, 10, "Peter Morgan", "0:45", "Netflix", "November 4, 2016")
 
 MEDIAS = [MOVIE1, MOVIE2, MOVIE3, MOVIE4, MOVIE5, TVSHOW1]
+
+#Calling the render page module to generate the html file
 render_page.open_media_page(MEDIAS)
