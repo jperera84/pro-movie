@@ -4,12 +4,12 @@ The project consists in a server side code to store a list of your favourite mov
 information for Movies and TVShows like Title, posters, and trailers.
 The Main.py file will generate a static web page allowing visitors to browse their movies, tv shows and watch the trailers.
 
-<b>Why this project?</b>
+# Why this project?
 
 This project was develop as Final Project for the course <i>"Programming Foundations with Python"</i> for the <i>Full Stack Web 
 Developer nanodegree (UDACITY)</i>.
 
-<b>Project code detail</b>
+# Project code detail
 
 The project consists in the following modules:
 
@@ -30,7 +30,7 @@ the web page.
 
 The project was developed using Python 2.7.12.
 
-<b>Steps to run the program:</b>
+# Steps to run the program:
 
 <ol>
   <li>Install Python 2.7.12 </li>
@@ -38,12 +38,12 @@ The project was developed using Python 2.7.12.
   <li>Run the main.py file</li>
 </ol>
 
-<b>Expected results</b>
+# Expected results
 
 The project will be interpreted by the Python interpreter and when the parser finish the program will open a new browser tab
 with the web page.
 
-<b>Issues</b>
+# Known issues
 <ol>
   <li>The search option is not implemented yet.</li>
   <li>There is an error in the JSON parse that everytime that you write any word with "'" the web page fail to open the info dialog.</li>
